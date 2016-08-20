@@ -1,0 +1,29 @@
+#######################################
+# Syntax Coloring Map ADIGasDetector
+#######################################
+
+#######################################
+# Library (KEYWORD3)
+#######################################
+adiGas   	    KEYWORD3
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+begin	            KEYWORD2
+activate	    KEYWORD2
+deactivate	    KEYWORD2
+readReostate	    KEYWORD2
+writeeostate	    KEYWORD2
+readTemperature	    KEYWORD2
+readCO2  	    KEYWORD2
+ADIGasDetector      KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
