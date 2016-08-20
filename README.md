@@ -13,8 +13,8 @@ The Digital rheostat is used to calibrate the Gas Sensor circuitry depending on 
 The ADuCM2361 has a preloaded firmware managing the Temperature and the Gas sensors and providing the
 related management to the Arduino boards torhugh the I2C bus using this library.
  
-[* AD ADT7320UCPZ-R2 Data Sheet *](http://www.analog.com/media/en/technical-documentation/data-sheets/ADT7320.pdf)
-[* AD AD5270BRMZ-20 Data Sheet *](http://www.analog.com/media/en/technical-documentation/data-sheets/AD5270_5271.pdf)
+* [* AD ADT7320UCPZ-R2 Data Sheet *](http://www.analog.com/media/en/technical-documentation/data-sheets/ADT7320.pdf)
+* [* AD AD5270BRMZ-20 Data Sheet *](http://www.analog.com/media/en/technical-documentation/data-sheets/AD5270_5271.pdf)
 
 Host control and result reading is performed using a I2C interface, no extra pin are required.
 
