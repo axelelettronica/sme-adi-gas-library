@@ -6,15 +6,15 @@ This is a library for the ADI Gas Detector shield board.
 The ADI Gas Detector is a mkr1000-format shield mounting a ADuCM2361 microcontroller interacting with:
 
 - ADT7320UCPZ-R2 temperature sensor
-- AD5270BRMZ-20 digita reostate
+- AD5270BRMZ-20 digita rheostat
 
-The Digital reostate is used to calibrate the Gas Sensor circuitry depending on the mounted sensor.
+The Digital rheostat is used to calibrate the Gas Sensor circuitry depending on the mounted sensor.
 
 The ADuCM2361 has a preloaded firmware managing the Temperature and the Gas sensors and providing the
 related management to the Arduino boards torhugh the I2C bus using this library.
  
-
-[* ST LPS25H Home Page *](http://www.stmicroelectronics.com.cn/web/catalog/sense_power/FM89/SC1316/PF255230)
+[* AD ADT7320UCPZ-R2 Data Sheet *](http://www.analog.com/media/en/technical-documentation/data-sheets/ADT7320.pdf)
+[* AD AD5270BRMZ-20 Data Sheet *](http://www.analog.com/media/en/technical-documentation/data-sheets/AD5270_5271.pdf)
 
 Host control and result reading is performed using a I2C interface, no extra pin are required.
 
