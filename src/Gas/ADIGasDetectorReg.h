@@ -10,7 +10,9 @@
 #define ADI_GAS_DETECTOR_REG_H_
 
 
-#define ADI_GAS_DETECTOR_ADDRESS 0x5C
+//#define ADI_GAS_DETECTOR_ADDRESS 0xA0 //0x5C
+#define ADI_GAS_DETECTOR_ADDRESS 0x50
+
 
 #define WHO_AM_I                 0x0F
 #define WHO_AM_I_RETURN          0xBD // Contains the device ID, BDh

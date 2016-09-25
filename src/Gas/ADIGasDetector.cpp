@@ -9,13 +9,13 @@
 #include "ADIGasDetectorReg.h"
 
 
-ADIGasDetector::ADIGasDetector(int mask) : _address(ADIGASDETECTOR_ADDRESS)
+ADIGasDetector::ADIGasDetector(int mask) : _address(ADI_GAS_DETECTOR_ADDRESS)
 {
     _reostate    = 0;
     _temperature = 0;
-    _sensorMask = mask;
+    _sensorsMask = mask;
 
-    for (int i = 0; i < MAX_SENSOR_NUM; ++i){
+    for (int i = 0; i < ADI_MAX_SENSOR_NUM; ++i){
         _gas[i] = 0;
     }
 }
@@ -126,7 +126,7 @@ ADIGasDetector::readCO2(int *co2)
     unsigned char read   = 0;
    
     *co2 = 0;
-    if (!(_sensorMask & ADI_CO2_SENSOR_MASK)) {
+    if (!(_sensorsMask & ADI_CO2_SENSOR_MASK)) {
         return -1;
     }
 
@@ -156,6 +156,7 @@ byte ADIGasDetector::readRegister(byte slaveAddress, byte regToRead)
     Wire.endTransmission(false); //endTransmission but keep the connection active
 
     Wire.requestFrom(slaveAddress, 1); //Ask for 1 byte, once done, bus is released by default
+
 
     while(!Wire.available()) ; //Wait for the data to come back
     return Wire.read(); //Return this one byte
