@@ -34,9 +34,9 @@ public:
     bool activate(void);
     bool deactivate(void);
 
-    bool writeReostate(int value);
-    int  readReostate(void);
-    int  readTemperature(void);
+    bool writeReostate(uint16_t value);
+    uint16_t  readReostate(void);
+    float  readTemperature(void);
     int  readCO2(int *co2);
 
 protected:

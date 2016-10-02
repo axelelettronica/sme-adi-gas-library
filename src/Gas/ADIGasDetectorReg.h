@@ -10,15 +10,6 @@
 #define ADI_GAS_DETECTOR_REG_H_
 
 
-//#define ADI_GAS_DETECTOR_ADDRESS 0xA0 //0x5C
-#define ADI_GAS_DETECTOR_ADDRESS 0x50
-
-
-#define WHO_AM_I                 0x0F
-#define WHO_AM_I_RETURN          0xBD // Contains the device ID, BDh
-
-#define RES_CONF_REG             0x10 // Pressure and Temperature internal average configuration.
-#define RES_CONF_DEFAULT         0x05
 
 
 /*
@@ -103,14 +94,31 @@
 #define REOSTATE_READY       0x2
 #define CO2_READY            0x3
 
-#define REOST_L_REG         0x29
-#define REOST_H_REG         0x2A
-#define TEMP_L_REG          0x2B
-#define TEMP_H_REG          0x2C
-#define CO2_L_REG           0x2D
-#define CO2_H_REG           0x2E
 
+//#define ADI_GAS_DETECTOR_ADDRESS 0xA0 //0x5C
+#define ADI_GAS_DETECTOR_ADDRESS 0x50
 
+// DEV ID Register - Read-Only
+#define WHO_AM_I              0x01
+#define WHO_AM_I_RETURN       0xB1 // Contains the device ID, BDh
+
+// Sw Version Register - Read-Only
+#define VERSION_REG           0x02   // Get FW Version
+
+// Temperature Register - Read-Only
+#define TEMP_H_REG            0x03   // Get Temperature
+// Temperature Register - Read-Only
+#define TEMP_L_REG            0x04  // Get Temperature
+
+// RHEOSTATE Register - Read/Write
+#define REOST_H_REG           0x0A    // Rheostate Register
+// RHEOSTATE Register - Read/Write
+#define REOST_L_REG           0x0B   // Rheostate Register
+
+// GAS Detection Register - Read-Only
+#define CO2_H_REG             0x20          // Rheostate Register
+// GAS Detection Register - Read-Only
+#define CO2_L_REG             0x21         // Rheostate Register
 
 
 #endif /* ADI_GAS_DETECTOR_REG_H_ */

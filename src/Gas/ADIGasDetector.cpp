@@ -23,13 +23,13 @@ ADIGasDetector::ADIGasDetector(int mask) : _address(ADI_GAS_DETECTOR_ADDRESS)
 
 bool ADIGasDetector::begin(void)
 {
-    uint8_t data;
+    volatile uint8_t data = 0;
 
     data = readRegister(_address, WHO_AM_I);
     if (data == WHO_AM_I_RETURN){
-        if (activate()){
+       // if (activate()){
             return true;
-        }
+      //  }
     }
     return false;
 }
@@ -61,7 +61,7 @@ bool ADIGasDetector::deactivate(void)
 }
 
 bool
-ADIGasDetector::writeReostate(int value)
+ADIGasDetector::writeReostate(uint16_t value)
 {
     uint8_t data;
 
@@ -73,14 +73,14 @@ ADIGasDetector::writeReostate(int value)
     return true;
 }
 
-int ADIGasDetector::readReostate(void)
+uint16_t ADIGasDetector::readReostate(void)
 {
-    unsigned int   data = 0;
-    unsigned char  read = 0;
-    double         r_temp = 0.0;
+    volatile uint16_t   data = 0;
+    volatile unsigned char  read = 0;
+    float         f_rheostate = 0.0;
 
-    read = readRegister(_address, STATUS_REG);
-    if (read & REOSTATE_READY) {
+    //read = readRegister(_address, STATUS_REG);
+//    if (read & REOSTATE_READY) {
         read = readRegister(_address, REOST_L_REG);
         data = read;      // LSB
 
@@ -88,34 +88,52 @@ int ADIGasDetector::readReostate(void)
         data |= read << 8; // MSB
         _reostate = data;
         // Decode reostate
-        r_temp = 42.5 +(_reostate/480.0);
-        _reostate  = r_temp;  // reostate 
-    }
+        if (!_reostate) {
+            f_rheostate = 120.0;
+        } else {
+            f_rheostate = (20000.0/1024.0)*_reostate;
+        }        
+       // _reostate  = f_rheostate;  // reostate 
+
+    //}
     return _reostate;
 }
 
 
 
-int
+/* Notes for conversion of 13 bit temperature: 
+ * bit 15 = sign , bits 0-3 to be removed, 14-4 eventually two complement
+ * Positive Temperature = ADC Code (dec)/16
+ * Negative Temperature = (ADC Code (dec) - 8192)/16
+ */
+float
 ADIGasDetector::readTemperature(void)
 {
-    unsigned int   data = 0;
-    unsigned char  read = 0;
-    double         t_temp = 0.0;
+    volatile unsigned int   data = 0;
+    volatile unsigned char  read = 0;
+    volatile int   t_temp = 0.0;
+    volatile float f_temp = 0.0;
 
-    read = readRegister(_address, STATUS_REG);
-    if (read & TEMPERATURE_READY) {
+    //read = readRegister(_address, STATUS_REG);
+    //if (read & TEMPERATURE_READY) {
         read = readRegister(_address, TEMP_L_REG);
         data = read;      // LSB
-
         read = readRegister(_address, TEMP_H_REG);
         data |= read << 8; // MSB
+
         _temperature = data;
         // Decode Temperature
-        t_temp = 42.5 +(_temperature/480.0);
-        _temperature  = t_temp;  // temp in Celsius degree
-    }
-    return _temperature;
+        if (data & 0x8000) {
+            // negative number
+            data = data >> 4;
+            f_temp = (data - 8192) / 16.0;
+        } else {
+            data = data >> 4;
+            f_temp = data / 16.0;            
+        }
+        // temp in Celsius degree
+    //}
+    return f_temp;
 }
 
 int
