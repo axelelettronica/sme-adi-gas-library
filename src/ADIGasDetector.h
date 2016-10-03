@@ -37,7 +37,7 @@ public:
     bool writeReostate(uint16_t value);
     uint16_t  readReostate(void);
     float  readTemperature(void);
-    int  readCO2(int *co2);
+    int  readCO2();
 
 protected:
     int     _gas[ADI_MAX_SENSOR_NUM];

@@ -66,9 +66,9 @@ ADIGasDetector::writeReostate(uint16_t value)
     uint8_t data;
 
     data = value & 0xFF;         // LSB
-    writeRegister(_address, REOST_L_REG, data);
-    data = (value < 0x8) & 0xFF; // MSB
-    writeRegister(_address, REOST_H_REG, data);
+    writeRegister(_address, REOST_W_L_REG, data);
+    data = (value >> 8) & 0x3; // MSB
+    writeRegister(_address, REOST_W_H_REG, data);
 
     return true;
 }
@@ -125,10 +125,10 @@ ADIGasDetector::readTemperature(void)
         // Decode Temperature
         if (data & 0x8000) {
             // negative number
-            data = data >> 4;
+            data = data >> 3;
             f_temp = (data - 8192) / 16.0;
         } else {
-            data = data >> 4;
+            data = data >> 3;
             f_temp = data / 16.0;            
         }
         // temp in Celsius degree
@@ -137,19 +137,18 @@ ADIGasDetector::readTemperature(void)
 }
 
 int
-ADIGasDetector::readCO2(int *co2)
+ADIGasDetector::readCO2(void)
 {
     unsigned long data   = 0;
     double        p_temp = 0.0;
     unsigned char read   = 0;
    
-    *co2 = 0;
     if (!(_sensorsMask & ADI_CO2_SENSOR_MASK)) {
         return -1;
     }
 
-    read = readRegister(_address, STATUS_REG);
-    if (read & CO2_READY) {
+ //   read = readRegister(_address, STATUS_REG);
+ //   if (read & CO2_READY) {
         read = readRegister(_address, CO2_H_REG);
         data = read << 8;  // MSB
         read = readRegister(_address, CO2_L_REG);
@@ -158,10 +157,8 @@ ADIGasDetector::readCO2(int *co2)
         // Decode CO2
         p_temp = ((long) data) / 4096.0;
         _gas[ADI_CO2_SENSOR] = p_temp;
-    }
-    *co2 = _gas[ADI_CO2_SENSOR];
-
-    return 0;
+  //  }
+    return  _gas[ADI_CO2_SENSOR];
 }
 
 

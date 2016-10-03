@@ -113,7 +113,11 @@
 // RHEOSTATE Register - Read/Write
 #define REOST_H_REG           0x0A    // Rheostate Register
 // RHEOSTATE Register - Read/Write
-#define REOST_L_REG           0x0B   // Rheostate Register
+#define REOST_L_REG           0x0C   // Rheostate Register
+// RHEOSTATE Register - Read/Write
+#define REOST_W_H_REG         0x0B    // Rheostate Register
+// RHEOSTATE Register - Read/Write
+#define REOST_W_L_REG         0x0D   // Rheostate Register
 
 // GAS Detection Register - Read-Only
 #define CO2_H_REG             0x20          // Rheostate Register
