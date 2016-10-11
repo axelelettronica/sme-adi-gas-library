@@ -34,13 +34,14 @@ public:
     bool activate(void);
     bool deactivate(void);
 
-    bool writeReostate(uint16_t value);
-    uint16_t  readReostate(void);
+    bool writeRawReostate(uint16_t value);
+    uint16_t  readRawReostate(void);
     float  readTemperature(void);
-    int  readCO2();
+    uint16_t readRawTemperature(void);
+    long  readRawCO2();
 
 protected:
-    int     _gas[ADI_MAX_SENSOR_NUM];
+    long    _gas[ADI_MAX_SENSOR_NUM];
     int     _reostate;
     int16_t _temperature;
 };

@@ -119,10 +119,15 @@
 // RHEOSTATE Register - Read/Write
 #define REOST_W_L_REG         0x0D   // Rheostate Register
 
+// Gas Value has 4 bytes size:  <XH-XL-H-L>
 // GAS Detection Register - Read-Only
 #define CO2_H_REG             0x20          // Rheostate Register
 // GAS Detection Register - Read-Only
 #define CO2_L_REG             0x21         // Rheostate Register
+// GAS Detection Register - Read-Only
+#define CO2_X_H_REG           0x22          // Rheostate Register
+// GAS Detection Register - Read-Only
+#define CO2_X_L_REG           0x23         // Rheostate Register
 
 
 #endif /* ADI_GAS_DETECTOR_REG_H_ */

@@ -61,7 +61,7 @@ bool ADIGasDetector::deactivate(void)
 }
 
 bool
-ADIGasDetector::writeReostate(uint16_t value)
+ADIGasDetector::writeRawReostate(uint16_t value)
 {
     uint8_t data;
 
@@ -73,7 +73,7 @@ ADIGasDetector::writeReostate(uint16_t value)
     return true;
 }
 
-uint16_t ADIGasDetector::readReostate(void)
+uint16_t ADIGasDetector::readRawReostate(void)
 {
     volatile uint16_t   data = 0;
     volatile unsigned char  read = 0;
@@ -99,6 +99,28 @@ uint16_t ADIGasDetector::readReostate(void)
     return _reostate;
 }
 
+/* Notes for conversion of 13 bit temperature: 
+ * bit 15 = sign , bits 0-3 to be removed, 14-4 eventually two complement
+ * Positive Temperature = ADC Code (dec)/16
+ * Negative Temperature = (ADC Code (dec) - 8192)/16
+ */
+uint16_t
+ADIGasDetector::readRawTemperature(void)
+{
+    volatile unsigned int   data = 0;
+    volatile unsigned char  read = 0;
+
+    //read = readRegister(_address, STATUS_REG);
+    //if (read & TEMPERATURE_READY) {
+        read = readRegister(_address, TEMP_L_REG);
+        data = read;      // LSB
+        read = readRegister(_address, TEMP_H_REG);
+        data |= read << 8; // MSB
+
+        _temperature = data;
+    //}    
+      return _temperature;
+}
 
 
 /* Notes for conversion of 13 bit temperature: 
@@ -113,34 +135,29 @@ ADIGasDetector::readTemperature(void)
     volatile unsigned char  read = 0;
     volatile int   t_temp = 0.0;
     volatile float f_temp = 0.0;
+    uint16_t ui16Temp = 0;
+    
+    ui16Temp = readTemperature();
 
-    //read = readRegister(_address, STATUS_REG);
-    //if (read & TEMPERATURE_READY) {
-        read = readRegister(_address, TEMP_L_REG);
-        data = read;      // LSB
-        read = readRegister(_address, TEMP_H_REG);
-        data |= read << 8; // MSB
-
-        _temperature = data;
-        // Decode Temperature
-        if (data & 0x8000) {
-            // negative number
-            data = data >> 3;
-            f_temp = (data - 8192) / 16.0;
-        } else {
-            data = data >> 3;
-            f_temp = data / 16.0;            
-        }
-        // temp in Celsius degree
-    //}
+    // Decode Temperature
+    if (ui16Temp & 0x8000) {
+       // negative number
+       ui16Temp = ui16Temp >> 3;
+       f_temp = (ui16Temp - 8192) / 16.0;
+    } else {
+       ui16Temp = ui16Temp >> 3;
+       f_temp = ui16Temp / 16.0;            
+    }
+    // temp in Celsius degree
     return f_temp;
 }
 
-int
-ADIGasDetector::readCO2(void)
+
+
+long
+ADIGasDetector::readRawCO2(void)
 {
-    unsigned long data   = 0;
-    double        p_temp = 0.0;
+    long          data   = 0;
     unsigned char read   = 0;
    
     if (!(_sensorsMask & ADI_CO2_SENSOR_MASK)) {
@@ -149,14 +166,20 @@ ADIGasDetector::readCO2(void)
 
  //   read = readRegister(_address, STATUS_REG);
  //   if (read & CO2_READY) {
+        read = readRegister(_address, CO2_X_H_REG);
+        data = read << 24;  // MSB H
+        delay(100);
+        read = readRegister(_address, CO2_X_L_REG);
+        data |= read  << 16;     // MSB L
+        delay(100);
         read = readRegister(_address, CO2_H_REG);
-        data = read << 8;  // MSB
+        data |= read << 8;  // LSB H
+        delay(100);
         read = readRegister(_address, CO2_L_REG);
-        data |= read ;     // LSB
+        data |= read ;     // LSB L
+        delay(100);
 
-        // Decode CO2
-        p_temp = ((long) data) / 4096.0;
-        _gas[ADI_CO2_SENSOR] = p_temp;
+        _gas[ADI_CO2_SENSOR] = data;
   //  }
     return  _gas[ADI_CO2_SENSOR];
 }
