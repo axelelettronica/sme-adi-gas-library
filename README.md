@@ -21,7 +21,7 @@ Host control and result reading is performed using a I2C interface, no extra pin
 It was principally designed to work with the ADI board, but could
 be easily adapted and used on every Arduino and Arduino Certified boards.
 
-Written by Seve <seve@axelelettronica.it>.
+Written by Seve <seve@ioteam.it>.
 
 ## Repository Contents
 -------------------
@@ -57,4 +57,3 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
-
