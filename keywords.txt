@@ -18,9 +18,12 @@ begin	            KEYWORD2
 activate	    KEYWORD2
 deactivate	    KEYWORD2
 readReostate	    KEYWORD2
-writeeostate	    KEYWORD2
+readRawReostate	    KEYWORD2
+writeRawReostate    KEYWORD2
+storeRawReostate    KEYWORD2
 readTemperature	    KEYWORD2
-readCO2  	    KEYWORD2
+readRawTemperature  KEYWORD2
+readRawCO2  	    KEYWORD2
 ADIGasDetector      KEYWORD2
 
 #######################################
