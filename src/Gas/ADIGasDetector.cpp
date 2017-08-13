@@ -27,10 +27,8 @@ bool ADIGasDetector::begin(void)
 
     data = readRegister(_address, WHO_AM_I);
     if (data == WHO_AM_I_RETURN){
-       // if (activate()){
-            return true;
-      //  }
-    }
+        return true;
+    } 
     return false;
 }
 
@@ -61,7 +59,7 @@ bool ADIGasDetector::deactivate(void)
 }
 
 bool
-ADIGasDetector::writeRawReostate(uint16_t value)
+ADIGasDetector::writeRawRheostate(uint16_t value)
 {
     uint8_t data;
 
@@ -73,29 +71,26 @@ ADIGasDetector::writeRawReostate(uint16_t value)
     return true;
 }
 
-uint16_t ADIGasDetector::readRawReostate(void)
+uint16_t ADIGasDetector::readRawRheostate(void)
 {
     volatile uint16_t   data = 0;
     volatile unsigned char  read = 0;
     float         f_rheostate = 0.0;
 
-    //read = readRegister(_address, STATUS_REG);
-//    if (read & REOSTATE_READY) {
-        read = readRegister(_address, REOST_L_REG);
-        data = read;      // LSB
+    read = readRegister(_address, REOST_L_REG);
+    data = read;      // LSB
 
-        read = readRegister(_address, REOST_H_REG);
-        data |= read << 8; // MSB
-        _reostate = data;
-        // Decode reostate
-        if (!_reostate) {
-            f_rheostate = 120.0;
-        } else {
-            f_rheostate = (20000.0/1024.0)*_reostate;
-        }        
-       // _reostate  = f_rheostate;  // reostate 
+    read = readRegister(_address, REOST_H_REG);
+    data |= read << 8; // MSB
+    _reostate = data;
+    // Decode reostate
+    if (!_reostate) {
+       f_rheostate = 120.0;
+    } else {
+       f_rheostate = (20000.0/1024.0)*_reostate;
+    }        
+    // _reostate  = f_rheostate;  // reostate 
 
-    //}
     return _reostate;
 }
 
@@ -110,15 +105,13 @@ ADIGasDetector::readRawTemperature(void)
     volatile unsigned int   data = 0;
     volatile unsigned char  read = 0;
 
-    //read = readRegister(_address, STATUS_REG);
-    //if (read & TEMPERATURE_READY) {
         read = readRegister(_address, TEMP_L_REG);
         data = read;      // LSB
+
         read = readRegister(_address, TEMP_H_REG);
         data |= read << 8; // MSB
 
         _temperature = data;
-    //}    
       return _temperature;
 }
 
@@ -137,7 +130,7 @@ ADIGasDetector::readTemperature(void)
     volatile float f_temp = 0.0;
     uint16_t ui16Temp = 0;
     
-    ui16Temp = readTemperature();
+    ui16Temp = readRawTemperature();
 
     // Decode Temperature
     if (ui16Temp & 0x8000) {
@@ -163,24 +156,21 @@ ADIGasDetector::readRawCO2(void)
     if (!(_sensorsMask & ADI_CO2_SENSOR_MASK)) {
         return -1;
     }
+    read = readRegister(_address, CO2_X_H_REG);
+    data = read << 24;  // MSB H
+    delay(100);
+    read = readRegister(_address, CO2_X_L_REG);
+    data |= read  << 16;     // MSB L
+    delay(100);
+    read = readRegister(_address, CO2_H_REG);
+    data |= read << 8;  // LSB H
+    delay(100);
+    read = readRegister(_address, CO2_L_REG);
+    data |= read ;     // LSB L
+    delay(100);
 
- //   read = readRegister(_address, STATUS_REG);
- //   if (read & CO2_READY) {
-        read = readRegister(_address, CO2_X_H_REG);
-        data = read << 24;  // MSB H
-        delay(100);
-        read = readRegister(_address, CO2_X_L_REG);
-        data |= read  << 16;     // MSB L
-        delay(100);
-        read = readRegister(_address, CO2_H_REG);
-        data |= read << 8;  // LSB H
-        delay(100);
-        read = readRegister(_address, CO2_L_REG);
-        data |= read ;     // LSB L
-        delay(100);
+    _gas[ADI_CO2_SENSOR] = data;
 
-        _gas[ADI_CO2_SENSOR] = data;
-  //  }
     return  _gas[ADI_CO2_SENSOR];
 }
 
@@ -191,12 +181,11 @@ byte ADIGasDetector::readRegister(byte slaveAddress, byte regToRead)
 {
     Wire.beginTransmission(slaveAddress);
     Wire.write(regToRead);
-    Wire.endTransmission(false); //endTransmission but keep the connection active
+    Wire.endTransmission();
 
+    delay(1);
     Wire.requestFrom(slaveAddress, 1); //Ask for 1 byte, once done, bus is released by default
 
-
-    while(!Wire.available()) ; //Wait for the data to come back
     return Wire.read(); //Return this one byte
 }
 

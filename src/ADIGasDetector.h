@@ -34,8 +34,8 @@ public:
     bool activate(void);
     bool deactivate(void);
 
-    bool writeRawReostate(uint16_t value);
-    uint16_t  readRawReostate(void);
+    bool writeRawRheostate(uint16_t value);
+    uint16_t  readRawRheostate(void);
     float  readTemperature(void);
     uint16_t readRawTemperature(void);
     long  readRawCO2();

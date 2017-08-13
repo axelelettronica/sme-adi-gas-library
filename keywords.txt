@@ -17,10 +17,10 @@ adiGas   	    KEYWORD3
 begin	            KEYWORD2
 activate	    KEYWORD2
 deactivate	    KEYWORD2
-readReostate	    KEYWORD2
-readRawReostate	    KEYWORD2
-writeRawReostate    KEYWORD2
-storeRawReostate    KEYWORD2
+readRheostate	    KEYWORD2
+readRawRheostate    KEYWORD2
+writeRawRheostate   KEYWORD2
+storeRawRheostate   KEYWORD2
 readTemperature	    KEYWORD2
 readRawTemperature  KEYWORD2
 readRawCO2  	    KEYWORD2
