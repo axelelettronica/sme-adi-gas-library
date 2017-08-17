@@ -158,16 +158,12 @@ ADIGasDetector::readRawCO2(void)
     }
     read = readRegister(_address, CO2_X_H_REG);
     data = read << 24;  // MSB H
-    delay(100);
     read = readRegister(_address, CO2_X_L_REG);
     data |= read  << 16;     // MSB L
-    delay(100);
     read = readRegister(_address, CO2_H_REG);
     data |= read << 8;  // LSB H
-    delay(100);
     read = readRegister(_address, CO2_L_REG);
     data |= read ;     // LSB L
-    delay(100);
 
     _gas[ADI_CO2_SENSOR] = data;
 
@@ -205,6 +201,19 @@ bool ADIGasDetector::writeRegister(byte slaveAddress, byte regToWrite, byte data
     return (errorNo == 0);
 }
 
+/* Read Firmware Version
+ * bit 15 = sign , bits 0-3 to be removed, 14-4 eventually two complement
+ * Positive Temperature = ADC Code (dec)/16
+ * Negative Temperature = (ADC Code (dec) - 8192)/16
+ */
+uint8_t
+ADIGasDetector::readFwVersion(void)
+{
+    volatile unsigned char  read = 0;
 
+    read = readRegister(_address, VERSION_REG);
+
+    return read;
+}
 
 ADIGasDetector adiGas;

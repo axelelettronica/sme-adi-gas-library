@@ -39,7 +39,7 @@ public:
     float  readTemperature(void);
     uint16_t readRawTemperature(void);
     long  readRawCO2();
-
+    uint8_t readFwVersion(void);
 protected:
     long    _gas[ADI_MAX_SENSOR_NUM];
     int     _reostate;
