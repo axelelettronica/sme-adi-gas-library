@@ -129,5 +129,14 @@
 // GAS Detection Register - Read-Only
 #define CO2_X_L_REG           0x23         // Rheostate Register
 
+#define I2C_RHEOSTATE_50TP_STORE   0x30     // Store RDAC in last available position
+#define I2C_R_RHEOSTATE_50TP_R_H   0x31     // Rheostate TP index val
+#define I2C_R_RHEOSTATE_50_TP_R_L  0x32     // Rheostate TP index val		
+#define I2C_R_RHEOSTATE_50TP_R_POS 0x33     // Get last used position		
+
+        // Unsupported commands      
+#define I2C_SLEEP                   0x3A    // Shutdown
+#define I2C_WAKEUP                  0x3B    // Wakeup 
+#define I2C_RHEOSTATE_RESET         0x3C    // Reset
 
 #endif /* ADI_GAS_DETECTOR_REG_H_ */

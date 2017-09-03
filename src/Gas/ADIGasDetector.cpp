@@ -171,6 +171,19 @@ ADIGasDetector::readRawCO2(void)
 }
 
 
+// Read a single byte from addressToRead and return it as a byte
+byte ADIGasDetector::readRegisterIndex(byte slaveAddress, byte regToRead, byte index)
+{
+    Wire.beginTransmission(slaveAddress);
+    Wire.write(regToRead);
+    Wire.write(index);
+    Wire.endTransmission();
+
+    delay(1);
+    Wire.requestFrom(slaveAddress, 1); //Ask for 1 byte, once done, bus is released by default
+
+    return Wire.read(); //Return this one byte
+}
 
 // Read a single byte from addressToRead and return it as a byte
 byte ADIGasDetector::readRegister(byte slaveAddress, byte regToRead)
@@ -215,5 +228,43 @@ ADIGasDetector::readFwVersion(void)
 
     return read;
 }
+
+uint16_t
+ADIGasDetector::readRheostateMemory(uint8_t index)
+{
+    volatile unsigned int   data = 0;
+    volatile unsigned char  read = 0;
+
+        read = readRegisterIndex(_address, I2C_R_RHEOSTATE_50_TP_R_L, index);
+        data = read;      // LSB
+
+        read = readRegisterIndex(_address, I2C_R_RHEOSTATE_50TP_R_H, index);
+        data |= read << 8; // MSB
+
+      return data;
+}
+
+uint16_t ADIGasDetector::storeRheostateInMemory()
+{
+    uint8_t data;
+
+    data = 0xFF;         // LSB
+    writeRegister(_address, I2C_RHEOSTATE_50TP_STORE, data);
+}
+
+/* This API returns the number of free Location still available.
+ * AD5270 has up to 50 free positions to store RDAC persistently
+ * This can be done via Store API.
+ */
+uint8_t
+ADIGasDetector::readRheostateFreeMemory(void)
+{
+    volatile unsigned int   data = 0;
+    volatile unsigned char  read = 0;
+
+    read = readRegister(_address, I2C_R_RHEOSTATE_50TP_R_POS);
+    return read;
+}
+
 
 ADIGasDetector adiGas;

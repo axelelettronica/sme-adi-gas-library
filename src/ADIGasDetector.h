@@ -27,7 +27,7 @@ private:
     uint8_t _address;
     byte readRegister(byte slaveAddress, byte regToRead);
     bool writeRegister(byte slaveAddress, byte regToWrite, byte dataToWrite);
-
+    byte readRegisterIndex(byte slaveAddress, byte regToRead, byte index);
 public:
     ADIGasDetector(int mask = ADI_CO2_SENSOR_MASK);
     bool begin(void);
@@ -40,6 +40,11 @@ public:
     uint16_t readRawTemperature(void);
     long  readRawCO2();
     uint8_t readFwVersion(void);
+
+    uint16_t readRheostateMemory(uint8_t index);
+    uint16_t storeRheostateInMemory();
+    uint8_t  readRheostateFreeMemory(void);
+
 protected:
     long    _gas[ADI_MAX_SENSOR_NUM];
     int     _reostate;

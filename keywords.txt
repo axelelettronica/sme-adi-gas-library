@@ -14,17 +14,20 @@ adiGas   	    KEYWORD3
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-begin	            KEYWORD2
-activate	    KEYWORD2
-deactivate	    KEYWORD2
-readRheostate	    KEYWORD2
-readRawRheostate    KEYWORD2
-writeRawRheostate   KEYWORD2
-storeRawRheostate   KEYWORD2
-readTemperature	    KEYWORD2
-readRawTemperature  KEYWORD2
-readRawCO2  	    KEYWORD2
-ADIGasDetector      KEYWORD2
+begin	                KEYWORD2
+activate	        KEYWORD2
+deactivate	        KEYWORD2
+readRheostate	        KEYWORD2
+readRawRheostate        KEYWORD2
+writeRawRheostate       KEYWORD2
+storeRawRheostate       KEYWORD2
+readTemperature         KEYWORD2
+readRawTemperature      KEYWORD2
+readRawCO2  	        KEYWORD2
+ADIGasDetector          KEYWORD2
+readRheostateMemory     KEYWORD2
+storeRheostateInMemory  KEYWORD2
+readRheostateFreeMemory KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
